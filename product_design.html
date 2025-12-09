@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Design Collection | Chen Xingyu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#020617',
+                        surface: '#0f172a',
+                        primary: '#06b6d4', // Cyan accent
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #020617;
+            color: #e2e8f0;
+            scrollbar-width: none; 
+            -ms-overflow-style: none; 
+        }
+        body::-webkit-scrollbar { 
+            display: none; 
+        }
+        .img-container, .video-container {
+            background-color: #1e293b; /* Fallback color */
+            overflow: hidden;
+            position: relative;
+            border-radius: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s ease;
+        }
+        .img-container:hover, .video-container:hover {
+            border-color: rgba(6, 182, 212, 0.5);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+        .img-content, .video-content {
+            width: 100%;
+            height: 100%;
+            object-position: center; 
+            object-fit: cover;
+            transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.5s ease;
+            filter: grayscale(20%);
+        }
+        .img-container:hover .img-content, .video-container:hover .video-content {
+            transform: scale(1.02);
+            filter: grayscale(0%);
+        }
+        /* Overlay Text */
+        .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 2rem;
+            background: linear-gradient(to top, rgba(2, 6, 23, 0.9), transparent);
+            opacity: 1; /* Always visible for banner usually, or hover */
+            transition: all 0.4s ease;
+        }
+        /* Custom Object Positions */
+        .obj-top { object-position: top center; }
+        .obj-focus-right-top { object-position: 80% 20%; } 
+        .obj-focus-right { object-position: 80% 50%; }     
+        
+        @media (max-width: 768px) {
+            .grid-layout { display: flex; flex-direction: column; gap: 1rem; }
+            .img-container { min-height: 300px; }
+        }
+    </style>
+</head>
+<body class="p-6 md:p-12 max-w-[1400px] mx-auto min-h-screen flex flex-col">
+
+    <section class="w-full h-[50vh] md:h-[60vh] mb-16 video-container group rounded-2xl shadow-2xl">
+        <video 
+            src="001.mov" 
+            class="video-content w-full h-full object-cover" 
+            autoplay 
+            loop 
+            muted 
+            playsinline
+        ></video>
+        <div class="overlay flex flex-col justify-end items-start">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
+                <span class="text-primary text-xs font-bold uppercase tracking-widest">Design Showreel</span>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-display font-bold text-white mb-2">Cinematic Visualization</h1>
+            <p class="text-slate-400 text-sm max-w-md">Rendering motion and light to bring static forms to life.</p>
+        </div>
+        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none">
+            <div class="w-20 h-20 rounded-full border border-white/20 bg-black/20 backdrop-blur flex items-center justify-center">
+                <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+        </div>
+    </section>
+
+    <header class="mb-12 md:mb-16 pl-2">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-bold tracking-widest mb-6 uppercase">
+            <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+            Industrial Design
+        </div>
+        <h2 class="text-4xl md:text-6xl font-display font-bold text-white mb-4 leading-tight">
+            Structure & <br/>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-500">Aesthetics</span>
+        </h2>
+    </header>
+
+    <main class="grid grid-cols-1 md:grid-cols-4 grid-rows-[300px_300px_300px_300px_300px_300px] gap-4 mb-20">
+        
+        <div class="img-container md:col-span-4 md:row-span-2 group">
+            <img src="16.jpg" alt="Wall-Painting Robot" class="img-content" onerror="this.src='https://placehold.co/1200x600/1e293b/FFF?text=16.jpg+Load+Error'" />
+            <div class="overlay opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0">
+                <span class="text-primary text-xs font-bold uppercase tracking-widest mb-1 block">Hero Project</span>
+                <h2 class="text-3xl font-bold text-white">Wall-Painting System</h2>
+            </div>
+        </div>
+
+        <div class="img-container md:col-span-1 md:row-span-2 group">
+            <img src="002.jpg" alt="EV Charger" class="img-content obj-focus-right-top" onerror="this.src='https://placehold.co/400x800/1e293b/FFF?text=002.jpg+Error'" />
+            <div class="overlay opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0">
+                <h3 class="text-lg font-bold text-white">EV Charger</h3>
+                <p class="text-xs text-slate-400">Vertical Form Factor</p>
+            </div>
+        </div>
+
+        <div class="img-container md:col-span-2 md:row-span-1 group">
+            <img src="17.jpg" alt="Mechanism" class="img-content" onerror="this.src='https://placehold.co/600x400/1e293b/FFF?text=17.jpg+Error'" />
+            <div class="absolute top-4 right-4 bg-black/60 backdrop-blur px-2 py-1 rounded text-[10px] text-white">Structure</div>
+        </div>
+
+        <div class="img-container md:col-span-1 md:row-span-2 group">
+            <img src="003.jpg" alt="Atmosphere Light" class="img-content obj-focus-right-top" onerror="this.src='https://placehold.co/400x800/1e293b/FFF?text=003.jpg+Error'" />
+            <div class="overlay opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0">
+                <h3 class="text-lg font-bold text-white">Atmosphere Light</h3>
+            </div>
+        </div>
+
+        <div class="img-container md:col-span-2 md:row-span-1 group">
+            <img src="004.jpg" alt="Packaging" class="img-content" onerror="this.src='https://placehold.co/600x400/1e293b/FFF?text=004.jpg+Error'" />
+            <div class="absolute top-4 right-4 bg-black/60 backdrop-blur px-2 py-1 rounded text-[10px] text-white">Packaging</div>
+        </div>
+
+        <div class="img-container md:col-span-1 md:row-span-2 group">
+            <img src="29.jpg" alt="Aoraki Speaker" class="img-content obj-focus-right" onerror="this.src='https://placehold.co/400x800/1e293b/FFF?text=29.jpg+Error'" />
+            <div class="overlay opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0">
+                <h3 class="text-lg font-bold text-white">Aoraki Speaker</h3>
+                <p class="text-xs text-slate-400">Conceptual Form</p>
+            </div>
+        </div>
+
+        <div class="img-container md:col-span-2 md:row-span-2 group">
+            <img src="26.jpg" alt="Liquid Furniture" class="img-content" onerror="this.src='https://placehold.co/800x800/1e293b/FFF?text=26.jpg+Error'" />
+            <div class="overlay opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0">
+                <h3 class="text-xl font-bold text-white">Liquid Furniture</h3>
+            </div>
+        </div>
+
+        <div class="img-container md:col-span-1 md:row-span-1 bg-black group">
+            <img src="005.jpg" alt="Water Bottle" class="img-content !object-contain p-4" onerror="this.src='https://placehold.co/400x400/1e293b/FFF?text=005.jpg+Error'" />
+        </div>
+
+        <div class="img-container md:col-span-1 md:row-span-1 bg-white group">
+            <img src="006.jpg" alt="Design Analysis" class="img-content !object-contain !filter-none p-2" onerror="this.src='https://placehold.co/400x400/1e293b/FFF?text=006.jpg+Error'" />
+        </div>
+
+        <div class="img-container md:col-span-4 h-[300px] bg-white/5 group">
+            <img src="15.jpg" alt="Sketches" class="img-content" onerror="this.src='https://placehold.co/1200x400/1e293b/FFF?text=15.jpg+Error'" />
+            <div class="overlay opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0">
+                <h3 class="text-lg font-bold text-white">Ideation & Process</h3>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="py-8 text-center text-slate-500 text-xs tracking-widest uppercase border-t border-white/5">
+        <p>© 2025 Chen Xingyu Design</p>
+    </footer>
+
+</body>
+</html>

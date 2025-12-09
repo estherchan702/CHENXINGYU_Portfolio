@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI/UX Design Collection | Chen Xingyu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#020617',
+                        surface: '#0f172a',
+                        primary: '#3b82f6', // Blue accent for UI/UX/Tech
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #020617;
+            color: #e2e8f0;
+            scrollbar-width: none; 
+            -ms-overflow-style: none; 
+        }
+        body::-webkit-scrollbar { 
+            display: none; 
+        }
+        .img-container {
+            background-color: #1e293b;
+            overflow: hidden;
+            position: relative;
+            border-radius: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s ease;
+        }
+        .img-container:hover {
+            border-color: rgba(59, 130, 246, 0.5); /* Blue Border */
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+        .img-content {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Default to top for UI designs to show headers */
+            object-position: top center;
+            transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.5s ease;
+            filter: grayscale(10%);
+        }
+        .img-container:hover .img-content {
+            transform: scale(1.03);
+            filter: grayscale(0%);
+        }
+        .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem;
+            background: linear-gradient(to top, rgba(2, 6, 23, 0.95), transparent);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s ease;
+        }
+        .img-container:hover .overlay {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Mobile adjustment */
+        @media (max-width: 768px) {
+            .img-container { min-height: 250px; }
+        }
+    </style>
+</head>
+<body class="p-6 md:p-12 max-w-[1400px] mx-auto min-h-screen flex flex-col">
+
+    <header class="mb-12 md:mb-16 pl-2">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-bold tracking-widest mb-6 uppercase">
+            <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+            User Experience & Interface
+        </div>
+        <h1 class="text-4xl md:text-6xl font-display font-bold text-white mb-4 leading-tight">
+            Digital <br/>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-cyan-400">Interactions</span>
+        </h1>
+        <p class="text-slate-400 max-w-xl text-sm md:text-base font-light leading-relaxed">
+            Designing intuitive digital ecosystems. From wireframing and user research to high-fidelity prototyping and visual polish across web and mobile platforms.
+        </p>
+    </header>
+
+    <main class="grid grid-cols-1 md:grid-cols-4 auto-rows-[300px] gap-4 mb-20">
+        
+        <div class="img-container md:col-span-4 md:row-span-2 group">
+            <img src="U7.jpg" alt="Game Store Web UI" class="img-content" onerror="this.src='https://placehold.co/1200x600/1e293b/FFF?text=U7.jpg+Error'" />
+            <div class="overlay !opacity-100 !translate-y-0">
+                <span class="text-primary text-xs font-bold uppercase tracking-widest mb-1 block">Web Design</span>
+                <h2 class="text-3xl font-bold text-white">Gaming Platform Concept</h2>
+                <p class="text-sm text-slate-300 mt-1">Immersive Layout & Interaction</p>
+            </div>
+        </div>
+
+        <div class="img-container md:col-span-2 md:row-span-2 group">
+            <img src="U5.jpg" alt="Health App UI System" class="img-content" onerror="this.src='https://placehold.co/600x600/1e293b/FFF?text=U5.jpg+Error'" />
+            <div class="overlay">
+                <h3 class="text-xl font-bold text-white">CapitalBio eHealth</h3>
+                <p class="text-xs text-slate-400">Design System & Dark Mode UI</p>
+            </div>
+        </div>
+
+        <div class="img-container md:col-span-2 md:row-span-1 group">
+            <img src="U4.jpg" alt="Health App Dashboard" class="img-content" onerror="this.src='https://placehold.co/600x300/1e293b/FFF?text=U4.jpg+Error'" />
+            <div class="overlay">
+                <h3 class="text-lg font-bold text-white">Dashboard View</h3>
+                <p class="text-xs text-slate-400">Data Visualization Mobile UI</p>
+            </div>
+        </div>
+
+        <div class="img-container md:col-span-2 md:row-span-1 group">
+            <img src="U2.jpg" alt="UX Wireframes" class="img-content" onerror="this.src='https://placehold.co/600x300/1e293b/FFF?text=U2.jpg+Error'" />
+             <div class="absolute top-4 right-4 bg-black/40 backdrop-blur px-2 py-1 rounded text-[10px] text-white/80">UX Process</div>
+            <div class="overlay">
+                <h3 class="text-lg font-bold text-white">Low-Fi Prototypes</h3>
+                <p class="text-xs text-slate-400">Information Architecture & User Flow</p>
+            </div>
+        </div>
+
+        <div class="img-container md:col-span-2 md:row-span-1 group">
+            <img src="U6.jpg" alt="Iconography" class="img-content" onerror="this.src='https://placehold.co/600x300/1e293b/FFF?text=U6.jpg+Error'" />
+            <div class="overlay">
+                <h3 class="text-lg font-bold text-white">Iconography System</h3>
+                <p class="text-xs text-slate-400">Linear Icon Set Design</p>
+            </div>
+        </div>
+
+        <div class="img-container md:col-span-2 md:row-span-1 group">
+            <img src="U8.jpg" alt="UI Illustrations" class="img-content" onerror="this.src='https://placehold.co/600x300/1e293b/FFF?text=U8.jpg+Error'" />
+            <div class="overlay">
+                <h3 class="text-lg font-bold text-white">UI Illustration</h3>
+                <p class="text-xs text-slate-400">Onboarding Visuals</p>
+            </div>
+        </div>
+
+        <div class="img-container md:col-span-1 md:row-span-2 group">
+            <img src="U9.jpg" alt="Hidalgo App" class="img-content" onerror="this.src='https://placehold.co/300x600/1e293b/FFF?text=U9.jpg+Error'" />
+            <div class="overlay">
+                <h3 class="text-lg font-bold text-white">Event App</h3>
+                <p class="text-xs text-slate-400">Mobile Interface</p>
+            </div>
+        </div>
+
+        <div class="img-container md:col-span-3 md:row-span-2 group">
+            <img src="U10.jpg" alt="Matcha Web Design" class="img-content" onerror="this.src='https://placehold.co/900x600/1e293b/FFF?text=U10.jpg+Error'" />
+            <div class="overlay">
+                <span class="text-primary text-xs font-bold uppercase tracking-widest mb-1 block">E-Commerce</span>
+                <h3 class="text-2xl font-bold text-white">Matcha Brand Website</h3>
+                <p class="text-sm text-slate-300">Responsive Web Layout & Visuals</p>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="py-8 text-center text-slate-500 text-xs tracking-widest uppercase border-t border-white/5">
+        <p>© 2025 Chen Xingyu Design</p>
+    </footer>
+
+</body>
+</html>

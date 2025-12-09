@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visual Design Collection | Chen Xingyu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#020617',
+                        surface: '#0f172a',
+                        primary: '#a855f7', // Purple accent for Visual/Art
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #020617;
+            color: #e2e8f0;
+            scrollbar-width: none; 
+            -ms-overflow-style: none; 
+        }
+        body::-webkit-scrollbar { 
+            display: none; 
+        }
+        .img-container {
+            background-color: #1e293b;
+            overflow: hidden;
+            position: relative;
+            border-radius: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s ease;
+        }
+        .img-container:hover {
+            border-color: rgba(168, 85, 247, 0.5); /* Purple Border */
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+        .img-content {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.5s ease;
+            filter: grayscale(10%);
+        }
+        .img-container:hover .img-content {
+            transform: scale(1.03);
+            filter: grayscale(0%);
+        }
+        .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem;
+            background: linear-gradient(to top, rgba(2, 6, 23, 0.95), transparent);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s ease;
+        }
+        .img-container:hover .overlay {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Mobile adjustment */
+        @media (max-width: 768px) {
+            .img-container { min-height: 250px; }
+        }
+    </style>
+</head>
+<body class="p-6 md:p-12 max-w-[1400px] mx-auto min-h-screen flex flex-col">
+
+    <header class="mb-12 md:mb-16 pl-2">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-bold tracking-widest mb-6 uppercase">
+            <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+            Visual Identity & Layout
+        </div>
+        <h1 class="text-4xl md:text-6xl font-display font-bold text-white mb-4 leading-tight">
+            Brand <br/>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-500">Communication</span>
+        </h1>
+        <p class="text-slate-400 max-w-xl text-sm md:text-base font-light leading-relaxed">
+            A selection of visual communication projects including branding, editorial design, and spatial graphics. Focusing on clarity, typography, and visual impact.
+        </p>
+    </header>
+
+    <main class="grid grid-cols-1 md:grid-cols-4 auto-rows-[300px] gap-4 mb-20">
+        
+        <div class="img-container md:col-span-4 md:row-span-2 group">
+            <img src="S2.jpg" alt="Event Stage Design" class="img-content" onerror="this.src='https://placehold.co/1200x600/1e293b/FFF?text=S2.jpg+Error'" />
+            <div class="overlay !opacity-100 !translate-y-0">
+                <span class="text-primary text-xs font-bold uppercase tracking-widest mb-1 block">Event Visuals</span>
+                <h2 class="text-3xl font-bold text-white">Stage & Multimedia Design</h2>
+                <p class="text-sm text-slate-300 mt-1">"Yi Dou Coming" Variety Show Set</p>
+            </div>
+        </div>
+
+        <div class="img-container md:col-span-2 md:row-span-2 group">
+            <img src="S13.jpg" alt="Brand Identity System" class="img-content" onerror="this.src='https://placehold.co/600x600/1e293b/FFF?text=S13.jpg+Error'" />
+            <div class="overlay">
+                <h3 class="text-xl font-bold text-white">Corporate Identity System</h3>
+                <p class="text-xs text-slate-400">Stationery & Visual Assets</p>
+            </div>
+        </div>
+
+        <div class="img-container md:col-span-2 md:row-span-1 group">
+            <img src="S11.jpg" alt="Interior Branding" class="img-content" onerror="this.src='https://placehold.co/600x300/1e293b/FFF?text=S11.jpg+Error'" />
+            <div class="overlay">
+                <h3 class="text-lg font-bold text-white">Spatial Branding</h3>
+                <p class="text-xs text-slate-400">Medical Center Reception</p>
+            </div>
+        </div>
+
+        <div class="img-container md:col-span-2 md:row-span-1 group">
+            <img src="S14.jpg" alt="Digital Banners" class="img-content !object-contain p-4 bg-[#f5f5f5]" onerror="this.src='https://placehold.co/600x300/1e293b/FFF?text=S14.jpg+Error'" />
+            <div class="overlay">
+                <h3 class="text-lg font-bold text-white">Digital Marketing Assets</h3>
+                <p class="text-xs text-slate-400">Banner & Promotion Design</p>
+            </div>
+        </div>
+
+        <div class="img-container md:col-span-2 md:row-span-1 group">
+            <img src="S9.jpg" alt="Brochure Design 1" class="img-content" onerror="this.src='https://placehold.co/600x300/1e293b/FFF?text=S9.jpg+Error'" />
+            <div class="overlay">
+                <h3 class="text-lg font-bold text-white">Editorial Design</h3>
+                <p class="text-xs text-slate-400">Medical Brochure Layout</p>
+            </div>
+        </div>
+
+        <div class="img-container md:col-span-2 md:row-span-1 group">
+            <img src="S10.jpg" alt="Brochure Design 2" class="img-content" onerror="this.src='https://placehold.co/600x300/1e293b/FFF?text=S10.jpg+Error'" />
+            <div class="overlay">
+                <h3 class="text-lg font-bold text-white">Information Architecture</h3>
+                <p class="text-xs text-slate-400">Data & Text Layout</p>
+            </div>
+        </div>
+
+        <div class="img-container md:col-span-1 md:row-span-1 group">
+            <img src="S6.jpg" alt="Brochure Cover" class="img-content" onerror="this.src='https://placehold.co/300x300/1e293b/FFF?text=S6.jpg+Error'" />
+             <div class="absolute top-4 right-4 bg-black/40 backdrop-blur px-2 py-1 rounded text-[10px] text-white/80">Cover</div>
+        </div>
+
+        <div class="img-container md:col-span-1 md:row-span-1 group">
+            <img src="S7.jpg" alt="Brochure Detail" class="img-content" onerror="this.src='https://placehold.co/300x300/1e293b/FFF?text=S7.jpg+Error'" />
+        </div>
+
+        <div class="img-container md:col-span-2 md:row-span-1 group">
+            <img src="S8.jpg" alt="Human Centric Layout" class="img-content" onerror="this.src='https://placehold.co/600x300/1e293b/FFF?text=S8.jpg+Error'" />
+            <div class="overlay">
+                <h3 class="text-lg font-bold text-white">Human-Centric Visuals</h3>
+            </div>
+        </div>
+
+        <div class="img-container md:col-span-2 md:row-span-1 group">
+            <img src="S3.jpg" alt="Stage Atmosphere 1" class="img-content" onerror="this.src='https://placehold.co/600x300/1e293b/FFF?text=S3.jpg+Error'" />
+            <div class="overlay">
+                <h3 class="text-lg font-bold text-white">Lighting & Atmosphere</h3>
+                <p class="text-xs text-slate-400">Stage Detail</p>
+            </div>
+        </div>
+
+        <div class="img-container md:col-span-2 md:row-span-1 group">
+            <img src="S4.jpg" alt="Stage Atmosphere 2" class="img-content" onerror="this.src='https://placehold.co/600x300/1e293b/FFF?text=S4.jpg+Error'" />
+            <div class="overlay">
+                <h3 class="text-lg font-bold text-white">Spatial Depth</h3>
+                <p class="text-xs text-slate-400">Set Construction</p>
+            </div>
+        </div>
+
+        <div class="img-container md:col-span-4 md:row-span-2 group">
+            <img src="S5.jpg" alt="Stage Panoramic View" class="img-content" onerror="this.src='https://placehold.co/1200x600/1e293b/FFF?text=S5.jpg+Error'" />
+            <div class="overlay !opacity-100 !translate-y-0">
+                <span class="text-primary text-xs font-bold uppercase tracking-widest mb-1 block">Immersive Experience</span>
+                <h2 class="text-3xl font-bold text-white">Environmental Design</h2>
+                <p class="text-sm text-slate-300 mt-1">Creating spaces that tell a story</p>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="py-8 text-center text-slate-500 text-xs tracking-widest uppercase border-t border-white/5">
+        <p>© 2025 Chen Xingyu Design</p>
+    </footer>
+
+</body>
+</html>

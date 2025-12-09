@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chen Xingyu | Human Centred Designer</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#020617', // Deepest Obsidian
+                        surface: '#0f172a', // Slate 900
+                        // Semantic Color Palette
+                        art: '#a855f7',      // Purple 500
+                        product: '#06b6d4',  // Cyan 500
+                        ai: '#3b82f6',       // Blue 500
+                        hcd: '#e2e8f0',      // Slate 200
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'spin-reverse-slower': 'spin 15s linear infinite reverse',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020617;
+            color: #e2e8f0;
+            overflow-x: hidden;
+            selection-background-color: #3b82f6; /* AI Blue */
+            selection-color: white;
+        }
+        h1, h2, h3, .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        .glass-panel:hover {
+            border-color: rgba(59, 130, 246, 0.3);
+            background: rgba(15, 23, 42, 0.6);
+        }
+        .gradient-text {
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            /* Cool Gradient: Purple -> Blue -> Cyan */
+            background-image: linear-gradient(135deg, #a855f7 0%, #3b82f6 50%, #06b6d4 100%);
+        }
+        /* New Gradients for the About Title */
+        .gradient-text-from {
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            /* Creative & Product: Purple -> Cyan */
+            background-image: linear-gradient(to right, #a855f7, #06b6d4);
+        }
+        .gradient-text-to {
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            /* Future & Human-Centric: Blue -> Slate/White */
+            background-image: linear-gradient(to right, #3b82f6, #e2e8f0);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #020617; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b; 
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3b82f6; 
+        }
+        
+        /* Iframe Modal Transition */
+        .modal-overlay {
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(12px); /* Stronger Blur for focus */
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+        // Access Motion global
+        const { motion, AnimatePresence, useScroll, useTransform } = window.Motion;
+
+        // --- Icons ---
+        const XIcon = ({ size = 24, className = "" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        );
+        const ExternalLinkIcon = ({ size = 16, className = "" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        );
+        const MusicIcon = ({ size = 24, className = "" }) => (
+             <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+        );
+
+        // --- Data ---
+        // Note: Links are placeholders for this demo. In a real environment, they would point to actual HTML files.
+        const portfolioItems = [
+            { 
+                id: 1, 
+                title: "Product Design", 
+                category: "Industry",   
+                image: "https://placehold.co/600x400/020617/06b6d4?text=Product+Design", 
+                desc: "Rhino 3DMax C4D Blender Vary Keyshot", 
+                link: "product_design.html" 
+            },
+            { 
+                id: 2, 
+                title: "2D Animation", 
+                category: "Rigged Animation", 
+                image: "https://placehold.co/600x400/020617/a855f7?text=2D+Animation", 
+                desc: "Live 2D  Spine AE",
+                link: "ani.html"
+            },
+            { 
+                id: 3, 
+                title: "UI UX", 
+                category: "APP User Research", 
+                image: "https://placehold.co/600x400/020617/3b82f6?text=UI+UX", 
+                desc: "Figma AdobeXD",
+                link: "ui_ux_design.html"
+            },
+            { 
+                id: 4, 
+                title: "Visual Design", 
+                category: "Visual Identity", 
+                image: "https://placehold.co/600x400/020617/6366f1?text=Visual+Design", 
+                desc: "Photoshop Illustrator InDesign",
+                link: "visual_design.html" 
+            },
+            { 
+                id: 5, 
+                title: "Data Visualization", 
+                category: "Programming", 
+                image: "https://placehold.co/600x400/020617/8b5cf6?text=Data+Visualization", 
+                desc: "HTML CSS JavaScript Python", 
+                link: "data_visualization.html" 
+            },
+            { 
+                id: 6, 
+                title: "AI-assisted design", 
+                category: "Prompt Fine-tuning Training LLM", 
+                image: "https://placehold.co/600x400/020617/0ea5e9?text=AI-assisted+design", 
+                desc: "GPT Claude Gemini Cursor Sora2 Suno", 
+                link: "ai_design.html" 
+            },
+        ];
+
+        const skills = [
+            { name: "UI/UX/UE Design", level: 95 },
+            { name: "Adobe Suite (PS/LR/ID/AI/PR/AE)", level: 94 },
+            { name: "Office Suite", level: 94 },
+            { name: "Rigged Animation (Live2D)", level: 90 },
+            { name: "3D Modeling & Rendering", level: 88 },
+            { name: "Photography", level: 88 },
+            { name: "Product Operation", level: 82 },
+            { name: "AI Tools & CSS/JS/Python", level: 80 },
+        ];
+
+        const experience = [
+            { year: "2024 - Present", role: "Operations", company: "Guang'an Sports Association", desc: "Public events coordination & artistic promotions." },
+            { year: "2020 - 2024", role: "Teaching Assistant", company: "Sichuan Conservatory of Music", desc: "Guided 2D/3D modeling courses and graduation exhibitions." },
+            { year: "2019 - 2020", role: "Designer", company: "Sichuan Construction Group", desc: "Medical industry interior and product design." },
+            { year: "Freelance", role: "Animation Designer", company: "Project Based", desc: "Live2D rigger for Bilibili, Genshin Impact, Gray Raven." },
+        ];
+
+        const awards = [
+            { year: '2024', title: 'Silver Award', desc: 'Intl. Environmental Charity Design', color: 'from-cyan-400 to-blue-500' },
+            { year: '2023', title: 'Silver Prize', desc: 'Hong Kong Contemporary Design Award', color: 'from-purple-400 to-indigo-500' },
+            { year: '2018', title: '1st Prize', desc: 'College Student Ad Design Competition', color: 'from-blue-400 to-indigo-600' },
+            { year: '2018', title: 'Silver Award', desc: 'Global Zodiac Visual Design', color: 'from-sky-400 to-cyan-600' },
+            { year: '2018', title: '2nd Prize', desc: 'National Innovation & Entrepreneurship', color: 'from-violet-400 to-purple-600' },
+            { year: '2017', title: 'Silver Award', desc: 'K-design International (Korea)', color: 'from-indigo-400 to-blue-600' }
+        ];
+
+        const certificates = [
+            { name: "Member", org: "American Psychological Association (APA)", icon: "🧠" },
+            { name: "Google UX Design", org: "Professional Certificate", icon: "G" },
+            { name: "Google AI Essentials", org: "Professional Certificate", icon: "AI" },
+            { name: "IBM Python", org: "Professional Certificate", icon: "IBM" }
+        ];
+
+        // --- Components ---
+
+        const ParticleBackground = () => {
+            const canvasRef = useRef(null);
+            useEffect(() => {
+                const canvas = canvasRef.current;
+                const ctx = canvas.getContext('2d');
+                let width, height;
+                let particles = [];
+                const resize = () => {
+                    width = canvas.width = window.innerWidth;
+                    height = canvas.height = window.innerHeight;
+                };
+                window.addEventListener('resize', resize);
+                resize();
+                
+                class Particle {
+                    constructor() {
+                        this.x = Math.random() * width;
+                        this.y = Math.random() * height;
+                        this.vx = (Math.random() - 0.5) * 0.3; 
+                        this.vy = (Math.random() - 0.5) * 0.3;
+                        this.size = Math.random() * 1.5 + 0.5;
+                    }
+                    update() {
+                        this.x += this.vx;
+                        this.y += this.vy;
+                        if (this.x < 0 || this.x > width) this.vx *= -1;
+                        if (this.y < 0 || this.y > height) this.vy *= -1;
+                    }
+                    draw() {
+                        const colors = ['rgba(59, 130, 246, 0.4)', 'rgba(168, 85, 247, 0.4)', 'rgba(6, 182, 212, 0.4)'];
+                        ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+                for (let i = 0; i < 80; i++) particles.push(new Particle());
+                const animate = () => {
+                    ctx.clearRect(0, 0, width, height);
+                    particles.forEach(p => {
+                        p.update();
+                        p.draw();
+                        particles.forEach(p2 => {
+                            const dx = p.x - p2.x;
+                            const dy = p.y - p2.y;
+                            const dist = Math.sqrt(dx*dx + dy*dy);
+                            if (dist < 120) {
+                                const gradient = ctx.createLinearGradient(p.x, p.y, p2.x, p2.y);
+                                gradient.addColorStop(0, 'rgba(59, 130, 246, 0.05)');
+                                gradient.addColorStop(1, 'rgba(168, 85, 247, 0.05)');
+                                ctx.strokeStyle = gradient;
+                                ctx.lineWidth = 0.5;
+                                ctx.beginPath();
+                                ctx.moveTo(p.x, p.y);
+                                ctx.lineTo(p2.x, p2.y);
+                                ctx.stroke();
+                            }
+                        });
+                    });
+                    requestAnimationFrame(animate);
+                };
+                animate();
+                return () => window.removeEventListener('resize', resize);
+            }, []);
+            return <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full -z-10" />;
+        };
+
+        const Navbar = ({ onOpenContact }) => {
+            return (
+                <nav className="fixed top-0 w-full z-50 glass-panel border-b-0">
+                    <div className="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+                        <div className="font-display font-bold text-xl tracking-tight text-white">
+                            CHEN XINGYU<span className="text-ai">.</span>
+                        </div>
+                        <div className="hidden md:flex space-x-10 text-xs font-medium uppercase tracking-widest text-slate-400">
+                            <a href="#about" className="hover:text-white transition duration-300">About</a>
+                            <a href="#portfolio" className="hover:text-white transition duration-300">Works</a>
+                            <a href="#experience" className="hover:text-white transition duration-300">Experience</a>
+                            <a href="#contact" className="hover:text-white transition duration-300">Contact</a>
+                        </div>
+                        <button 
+                            onClick={onOpenContact}
+                            className="px-5 py-2 rounded-full bg-white/5 text-slate-200 border border-white/10 hover:bg-white/10 hover:border-ai/50 hover:text-white transition duration-300 text-xs font-medium uppercase tracking-wide cursor-pointer"
+                        >
+                            Let's Talk
+                        </button>
+                    </div>
+                </nav>
+            );
+        };
+
+        // NEW: Contact Modal Component
+        const ContactModal = ({ onClose }) => {
+            return (
+                <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="fixed inset-0 z-[100] flex items-center justify-center p-4 modal-overlay"
+                    onClick={onClose}
+                >
+                    <motion.div 
+                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                        transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                        className="relative max-w-sm w-full"
+                        onClick={(e) => e.stopPropagation()} 
+                    >
+                        <div className="glass-panel p-1 rounded-2xl border border-white/10 shadow-[0_0_50px_-12px_rgba(59,130,246,0.3)] overflow-hidden bg-slate-900/80">
+                            
+                            {/* Close Button */}
+                            <button 
+                                onClick={onClose}
+                                className="absolute top-4 right-4 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-black/40 text-white/70 hover:text-white hover:bg-black/60 transition backdrop-blur-sm border border-white/10"
+                            >
+                                <XIcon size={16} />
+                            </button>
+
+                            {/* Image Container */}
+                            <div className="relative rounded-xl overflow-hidden">
+                                <img 
+                                    src="what.jpg" 
+                                    alt="Contact Info" 
+                                    className="w-full h-auto object-cover block"
+                                />
+                                <div className="absolute inset-0 border border-white/10 rounded-xl pointer-events-none"></div>
+                            </div>
+                        </div>
+                    </motion.div>
+                </motion.div>
+            );
+        };
+
+        const Hero = () => {
+            return (
+                <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
+                    <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+                        <motion.div 
+                            initial={{ opacity: 0, x: -50 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.8 }}
+                            className="z-10"
+                        >
+                            <h2 className="text-ai font-medium tracking-[0.2em] text-xs mb-6 uppercase flex items-center gap-2">
+                                <span className="w-8 h-px bg-ai"></span>
+                                Portfolio 2025
+                            </h2>
+                            <h1 className="text-5xl md:text-7xl font-display font-bold leading-[1.1] mb-8 text-white">
+                                Designing <br/>
+                                <span className="gradient-text">Digital Soul</span>
+                            </h1>
+                            <p className="text-slate-400 text-lg mb-10 max-w-xl font-light leading-relaxed">
+                                Master's Candidate in Human Centred Design at SUTD. Fusing <span className="text-slate-200 font-normal">UI/UX</span>, <span className="text-slate-200 font-normal">Product Design</span>, and <span className="text-slate-200 font-normal">Animation</span> with <span className="text-slate-200 font-normal">Code</span> & <span className="text-slate-200 font-normal">LLMs</span>. I focus on <span className="text-slate-200 font-normal">Behavioral Research</span>, <span className="text-slate-200 font-normal">Emotion Modeling</span>, and <span className="text-slate-200 font-normal">Multimodal Integration</span>.
+                            </p>
+                            <div className="flex gap-4">
+                                <a 
+                                    href="#portfolio"
+                                    className="px-8 py-3 bg-white text-slate-950 font-bold rounded-lg hover:bg-ai/20 hover:text-ai transition duration-300 shadow-[0_0_25px_rgba(59,130,246,0.1)] flex items-center justify-center"
+                                >
+                                    View Works
+                                </a>
+                                <a 
+                                    href="CXY2025.jpg" 
+                                    download="CXY2025.jpg"
+                                    className="px-8 py-3 glass-panel text-white rounded-lg hover:bg-white/10 transition duration-300 border border-white/5 flex items-center justify-center cursor-pointer"
+                                >
+                                    Download CV
+                                </a>
+                            </div>
+                        </motion.div>
+
+                        <motion.div 
+                            className="relative hidden md:block flex justify-center items-center"
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 1, delay: 0.2 }}
+                        >
+                            <div className="relative w-[500px] h-[500px]">
+                                {/* Cool Tone Rings */}
+                                <div className="absolute inset-0 rounded-full border border-art/20 animate-[spin_10s_linear_infinite]"></div>
+                                <div className="absolute inset-10 rounded-full border border-product/20 animate-[spin_15s_linear_infinite_reverse]"></div>
+
+                                {/* Photo Container */}
+                                <div className="absolute inset-4 rounded-full overflow-hidden border-2 border-white/10 shadow-2xl z-10 bg-slate-900 group">
+                                    <div className="absolute inset-0 bg-gradient-to-tr from-art/30 to-product/30 mix-blend-overlay z-20 group-hover:opacity-0 transition duration-500"></div>
+                                    <img 
+                                        src="01.jpg" 
+                                        onError={(e) => {
+                                            e.target.onerror = null; 
+                                            e.target.src = "https://placehold.co/800x800/2a2a2a/white?text=Chen+Xingyu";
+                                        }}
+                                        alt="Chen Xingyu" 
+                                        className="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-700 transform hover:scale-105"
+                                    />
+                                </div>
+
+                                {/* Badges */}
+                                <motion.div 
+                                    className="absolute -right-0 top-20 glass-panel px-4 py-2 rounded-lg border border-art/30 text-xs text-art backdrop-blur-md z-30"
+                                    animate={{ y: [0, -10, 0] }}
+                                    transition={{ repeat: Infinity, duration: 4 }}
+                                >
+                                    🎵 Music Background
+                                </motion.div>
+                                <motion.div 
+                                    className="absolute -right-8 top-40 glass-panel px-4 py-2 rounded-lg border border-ai/30 text-xs text-ai backdrop-blur-md z-20"
+                                    animate={{ y: [0, -8, 0] }}
+                                    transition={{ repeat: Infinity, duration: 4.5, delay: 0.5 }}
+                                >
+                                    💻 Programming
+                                </motion.div>
+
+                                <motion.div 
+                                    className="absolute -left-4 bottom-20 glass-panel px-4 py-2 rounded-lg border border-ai/30 text-xs text-ai backdrop-blur-md z-30"
+                                    animate={{ y: [0, 10, 0] }}
+                                    transition={{ repeat: Infinity, duration: 5 }}
+                                >
+                                    🧠 Psychology (APA)
+                                </motion.div>
+                                <motion.div 
+                                    className="absolute -left-12 bottom-40 glass-panel px-4 py-2 rounded-lg border border-hcd/30 text-xs text-hcd backdrop-blur-md z-20"
+                                    animate={{ y: [0, 8, 0] }}
+                                    transition={{ repeat: Infinity, duration: 5.5, delay: 0.5 }}
+                                >
+                                    ✨ HCD Design
+                                </motion.div>
+                                
+                                <motion.div 
+                                    className="absolute -left-6 top-16 glass-panel px-4 py-2 rounded-lg border border-product/30 text-xs text-product backdrop-blur-md z-30"
+                                    animate={{ y: [0, -6, 0] }}
+                                    transition={{ repeat: Infinity, duration: 4.2, delay: 0.2 }}
+                                >
+                                    🎞️ Animation
+                                </motion.div>
+                                <motion.div 
+                                    className="absolute -right-4 bottom-24 glass-panel px-4 py-2 rounded-lg border border-white/20 text-xs text-slate-200 backdrop-blur-md z-30"
+                                    animate={{ y: [0, 8, 0] }}
+                                    transition={{ repeat: Infinity, duration: 4.8, delay: 0.8 }}
+                                >
+                                    💼 5 Years Exp.
+                                </motion.div>
+                            </div>
+                        </motion.div>
+                    </div>
+                </section>
+            );
+        };
+
+        // 4. About & Awards Section
+        const About = () => {
+            return (
+                <section id="about" className="py-32 relative">
+                    <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-24">
+                        <div>
+                            <div className="inline-block px-3 py-1 rounded-full border border-ai/30 bg-ai/10 text-ai text-[10px] font-bold tracking-widest mb-6">
+                                MULTIDISCIPLINARY BACKGROUND
+                            </div>
+                            
+                            {/* UPDATED TITLE WITH NEW GRADIENT CLASSES */}
+                            <h2 className="text-4xl font-display font-bold mb-8 text-white leading-tight">
+                                From <span className="gradient-text-from">ART & Product</span> <br/>
+                                To <span className="gradient-text-to">AI & HCD Design</span>
+                            </h2>
+                            
+                            {/* Updated Bio Text */}
+                            <p className="text-slate-400 leading-relaxed mb-6 text-lg font-light">
+                                I have over <strong className="text-slate-200">five years</strong> of professional experience and am currently pursuing a Master’s degree in <strong className="text-slate-200">Human-Centred Design</strong> at the Singapore University of Technology and Design (SUTD). My core strength lies in translating complex technical constraints into intuitive, user-centric product solutions—a skill shaped by my background in product management and operational leadership.
+                            </p>
+                            <p className="text-slate-400 leading-relaxed mb-8">
+                                With an interdisciplinary foundation in <strong className="text-ai">coding</strong>, over ten years of <strong className="text-art">music training</strong>, and studies in pedagogy and <strong className="text-product">psychology</strong>, I bring a holistic UX perspective that enables me to design digital products that are not only highly functional and usable, but also emotionally engaging and aesthetically refined.
+                            </p>
+                            
+                            <h4 className="font-bold text-white mb-8 mt-16 flex items-center gap-3 text-lg">
+                                <span className="text-2xl">🏆</span> Recognition
+                            </h4>
+                            
+                            {/* Awards - List Cards Layout */}
+                            <div className="space-y-4">
+                                {awards.map((award, idx) => (
+                                    <motion.div 
+                                        key={idx}
+                                        initial={{ opacity: 0, x: -20 }}
+                                        whileInView={{ opacity: 1, x: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ delay: idx * 0.1 }}
+                                        className="glass-panel p-4 rounded-xl relative overflow-hidden group cursor-default"
+                                    >
+                                        <div className={`absolute top-0 left-0 w-1 h-full bg-gradient-to-b ${award.color}`}></div>
+                                        <div className="flex items-center gap-5 pl-3 relative z-10">
+                                            <div className="flex flex-col items-center justify-center min-w-[3rem]">
+                                                <span className="text-[10px] uppercase font-mono text-slate-500 mb-0.5 tracking-wider">Year</span>
+                                                <span className="text-sm font-bold text-white font-display">{award.year}</span>
+                                            </div>
+                                            <div className="w-px h-8 bg-white/10 group-hover:bg-white/20 transition-colors"></div>
+                                            <div>
+                                                <h5 className="font-bold text-slate-200 text-sm group-hover:text-white transition-colors">{award.title}</h5>
+                                                <p className="text-xs text-slate-400 mt-0.5 group-hover:text-ai transition-colors">{award.desc}</p>
+                                            </div>
+                                        </div>
+                                        <div className={`absolute -right-6 -bottom-6 w-24 h-24 bg-gradient-to-br ${award.color} opacity-0 group-hover:opacity-20 blur-2xl transition-opacity duration-500 pointer-events-none`}></div>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </div>
+                        
+                        <div className="relative">
+                            <div className="sticky top-32">
+                                <h3 className="text-white font-bold mb-10 text-xl">Technical Arsenal</h3>
+                                <div className="space-y-6">
+                                    {skills.map((skill, index) => (
+                                        <div key={index} className="group">
+                                            <div className="flex justify-between mb-2 items-end">
+                                                <span className="text-sm font-medium text-slate-300 group-hover:text-white transition">{skill.name}</span>
+                                                <span className="text-xs font-mono text-slate-500 group-hover:text-product transition">{skill.level}%</span>
+                                            </div>
+                                            <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                                                <motion.div 
+                                                    initial={{ width: 0 }}
+                                                    whileInView={{ width: `${skill.level}%` }}
+                                                    transition={{ duration: 1.2, delay: 0.1 * index, ease: "easeOut" }}
+                                                    // Cool Gradient for Bars
+                                                    className="h-full bg-gradient-to-r from-art via-ai to-product rounded-full opacity-80 group-hover:opacity-100"
+                                                />
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                                
+                                <div className="mt-12 grid grid-cols-1 gap-8">
+                                    {/* Certificates */}
+                                    <div className="pt-6 border-t border-white/5">
+                                        <h4 className="text-[10px] text-slate-500 uppercase tracking-widest mb-4 font-bold">Certifications & Memberships</h4>
+                                        <div className="grid grid-cols-1 gap-3">
+                                            {certificates.map((cert, idx) => (
+                                                <div key={idx} className="flex items-center gap-4 glass-panel p-3 rounded-lg group hover:bg-white/5 transition">
+                                                    <div className="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-sm">{cert.icon}</div>
+                                                    <div>
+                                                        <div className="text-sm font-bold text-slate-200 group-hover:text-white transition">{cert.name}</div>
+                                                        <div className="text-xs text-slate-500">{cert.org}</div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Languages */}
+                                    <div className="pt-6 border-t border-white/5">
+                                        <h4 className="text-[10px] text-slate-500 uppercase tracking-widest mb-4 font-bold">Languages</h4>
+                                        <div className="flex flex-wrap gap-2">
+                                            <span className="px-3 py-1.5 bg-white/5 text-slate-300 text-xs rounded-md border border-white/10 flex items-center gap-2">
+                                                Mandarin <span className="w-1.5 h-1.5 bg-product rounded-full"></span> <span className="text-slate-500">Native</span>
+                                            </span>
+                                            <span className="px-3 py-1.5 bg-white/5 text-slate-300 text-xs rounded-md border border-white/10 flex items-center gap-2">
+                                                English <span className="w-1.5 h-1.5 bg-ai rounded-full"></span> <span className="text-slate-500">Fluent</span>
+                                            </span>
+                                            <span className="px-3 py-1.5 bg-white/5 text-slate-300 text-xs rounded-md border border-white/10 flex items-center gap-2">
+                                                Japanese <span className="w-1.5 h-1.5 bg-art rounded-full"></span> <span className="text-slate-500">Basic</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            );
+        };
+
+        // 5. Portfolio Section (Modified for Modal Iframe)
+        const Portfolio = () => {
+            const [filter, setFilter] = useState('All');
+            const [selectedItem, setSelectedItem] = useState(null); // State for Modal
+            const categories = ['All', 'Product', 'Visual', 'Animation', 'UI/UX'];
+            const filteredItems = filter === 'All' ? portfolioItems : portfolioItems.filter(item => item.category === filter);
+
+            return (
+                <section id="portfolio" className="py-32 relative bg-[#01040f]">
+                    <div className="max-w-7xl mx-auto px-6">
+                        <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-20 gap-8">
+                            <div>
+                                <h2 className="text-4xl font-display font-bold mb-4 text-white">Selected Works</h2>
+                                <p className="text-slate-400 font-light">A curation of creative outputs across digital and physical realms.</p>
+                            </div>
+                        </div>
+
+                        <motion.div layout className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            <AnimatePresence>
+                                {filteredItems.map(item => (
+                                    <motion.div
+                                        layout
+                                        initial={{ opacity: 0, scale: 0.95 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.95 }}
+                                        transition={{ duration: 0.4 }}
+                                        key={item.id}
+                                        className="group relative cursor-pointer"
+                                        onClick={() => setSelectedItem(item)} // OPEN MODAL
+                                    >
+                                        <div className="aspect-[4/3] rounded-lg overflow-hidden bg-slate-900 border border-slate-800/50 relative z-0">
+                                            <img src={item.image} alt={item.title} className="w-full h-full object-cover transition duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100" />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent opacity-60 group-hover:opacity-90 transition duration-300"></div>
+                                            <div className="absolute bottom-0 left-0 w-full p-6 translate-y-2 group-hover:translate-y-0 transition duration-300">
+                                                <span className="text-product text-[10px] font-bold uppercase tracking-widest mb-2 block truncate w-full">{item.category}</span>
+                                                {/* Conditional font size further reduced for visual harmony */}
+                                                <h3 className={`font-bold text-white mb-1 ${item.title === 'UI UX' ? 'text-sm' : 'text-lg'}`}>{item.title}</h3>
+                                                <p className="text-xs text-slate-400 opacity-0 group-hover:opacity-100 transition duration-300 delay-75 line-clamp-1">{item.desc}</p>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </AnimatePresence>
+                        </motion.div>
+                    </div>
+
+                    {/* MODAL COMPONENT */}
+                    <AnimatePresence>
+                        {selectedItem && (
+                            <motion.div 
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="fixed inset-0 z-[60] flex items-center justify-center p-4 modal-overlay"
+                                onClick={() => setSelectedItem(null)} // Close on background click
+                            >
+                                <motion.div 
+                                    initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                                    animate={{ scale: 1, opacity: 1, y: 0 }}
+                                    exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                                    transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                                    // Frame Style: Frosted Glass + Deep Shadow
+                                    className="relative w-full max-w-6xl h-[85vh] rounded-2xl overflow-hidden flex flex-col"
+                                    style={{
+                                        background: 'rgba(15, 23, 42, 0.6)', 
+                                        backdropFilter: 'blur(24px)',         
+                                        boxShadow: '0 0 80px -20px rgba(99, 102, 241, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1) inset' 
+                                    }}
+                                    onClick={(e) => e.stopPropagation()} // Prevent close on modal click
+                                >
+                                    {/* Modal Header - Glassy HUD */}
+                                    <div className="w-full h-14 flex items-center justify-between px-6 border-b border-white/5 shrink-0">
+                                        <div className="flex items-center gap-4">
+                                            {/* Ghost State Controls (Visible on Hover) */}
+                                            <div className="flex gap-2 group/controls">
+                                                <div className="w-3 h-3 rounded-full bg-white/10 border border-white/5 group-hover/controls:bg-rose-500/90 group-hover/controls:border-rose-500/50 transition-all duration-300 shadow-inner"></div>
+                                                <div className="w-3 h-3 rounded-full bg-white/10 border border-white/5 group-hover/controls:bg-amber-500/90 group-hover/controls:border-amber-500/50 transition-all duration-300 delay-75 shadow-inner"></div>
+                                                <div className="w-3 h-3 rounded-full bg-white/10 border border-white/5 group-hover/controls:bg-emerald-500/90 group-hover/controls:border-emerald-500/50 transition-all duration-300 delay-100 shadow-inner"></div>
+                                            </div>
+                                            
+                                            {/* Minimalist URL Bar */}
+                                            <div className="h-8 px-4 rounded-lg bg-black/20 border border-white/5 flex items-center gap-2 text-[10px] text-slate-400 font-mono shadow-inner">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></div>
+                                                <span className="opacity-70">{selectedItem.link}</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <button 
+                                            onClick={() => setSelectedItem(null)}
+                                            className="text-slate-500 hover:text-white transition p-2 hover:bg-white/5 rounded-full"
+                                        >
+                                            <XIcon size={18} />
+                                        </button>
+                                    </div>
+
+                                    {/* Iframe Content Container - Padded to show glass frame */}
+                                    <div className="flex-1 p-2 overflow-hidden relative">
+                                        <div className="w-full h-full rounded-xl overflow-hidden bg-slate-950 border border-white/5 relative shadow-2xl">
+                                            {selectedItem.link ? (
+                                                <iframe 
+                                                    src={selectedItem.link} 
+                                                    className="w-full h-full border-0 bg-white" 
+                                                    title={selectedItem.title}
+                                                />
+                                            ) : (
+                                                <div className="flex flex-col items-center justify-center h-full text-slate-500">
+                                                    <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4">
+                                                        <ExternalLinkIcon size={20} className="opacity-50" />
+                                                    </div>
+                                                    <p className="text-sm font-medium">Preview Unavailable</p>
+                                                </div>
+                                            )}
+                                            
+                                            {/* FAB - Open in New Tab (Beautified) */}
+                                            {selectedItem.link && (
+                                                <a 
+                                                    href={selectedItem.link} 
+                                                    target="_blank" 
+                                                    className="absolute bottom-6 right-6 px-5 py-2.5 bg-slate-900/90 hover:bg-ai text-white rounded-full text-xs font-bold border border-white/10 backdrop-blur-md shadow-lg flex items-center gap-2 transition-all duration-300 group/btn"
+                                                >
+                                                    Open <ExternalLinkIcon size={12} className="group-hover/btn:translate-x-0.5 transition-transform" />
+                                                </a>
+                                            )}
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </section>
+            );
+        };
+
+        // 6. Experience Timeline (Zig-Zag)
+        const Experience = () => {
+            return (
+                <section id="experience" className="py-32 relative">
+                    <div className="max-w-5xl mx-auto px-6">
+                        <div className="text-center mb-20">
+                            <h2 className="text-3xl font-display font-bold mb-4 text-white">Professional Journey</h2>
+                            <div className="w-12 h-1 bg-gradient-to-r from-art to-product mx-auto rounded-full"></div>
+                        </div>
+                        
+                        <div className="relative">
+                            <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-slate-800"></div>
+                            
+                            <div className="space-y-16">
+                                {experience.map((exp, idx) => (
+                                    <div key={idx} className={`relative flex flex-col md:flex-row gap-10 ${idx % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
+                                        
+                                        <div className="md:w-1/2 flex md:items-center md:justify-end pl-12 md:pl-0 md:px-10">
+                                            <span className={`text-sm font-mono text-ai py-1.5 px-4 rounded-full bg-ai/10 border border-ai/20 ${idx % 2 === 0 ? 'md:text-left' : 'md:text-right'}`}>
+                                                {exp.year}
+                                            </span>
+                                        </div>
+                                        
+                                        <div className="absolute left-4 md:left-1/2 -translate-x-1/2 w-3 h-3 bg-slate-950 border border-ai rounded-full z-10 mt-2 md:mt-0 shadow-[0_0_8px_rgba(59,130,246,0.5)]"></div>
+                                        
+                                        <div className="md:w-1/2 pl-12 md:pl-0 md:px-10">
+                                            <div className="group">
+                                                <h3 className="text-xl font-bold text-white mb-1 group-hover:text-ai transition">{exp.role}</h3>
+                                                <h4 className="text-slate-400 text-sm mb-4 font-medium tracking-wide">
+                                                    {exp.company}
+                                                </h4>
+                                                <p className="text-slate-500 text-sm leading-relaxed max-w-sm">{exp.desc}</p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            );
+        };
+
+        // 7. Footer
+        const Contact = () => {
+            return (
+                <section id="contact" className="py-24 relative overflow-hidden bg-gradient-to-b from-[#020617] to-[#050b1f]">
+                    <div className="max-w-3xl mx-auto px-6 text-center">
+                        <h2 className="text-4xl md:text-5xl font-display font-bold mb-8 text-white">Create the Next Big Thing?</h2>
+                        <p className="text-slate-400 mb-12 text-lg font-light">
+                            Currently open for full-time opportunities in UX Design or Technical Art. 
+                            <br/>Based in Singapore.
+                        </p>
+                        
+                        <div className="glass-panel inline-flex flex-col md:flex-row items-center gap-8 p-10 rounded-2xl border border-white/5 shadow-2xl">
+                            <div className="text-left">
+                                <p className="text-[10px] text-slate-500 uppercase tracking-widest mb-2 font-semibold">Email</p>
+                                <a href="mailto:estherchan702@gmail.com" className="text-lg md:text-xl font-medium text-white hover:text-ai transition">
+                                    estherchan702@gmail.com
+                                </a>
+                            </div>
+                            <div className="w-px h-12 bg-white/10 hidden md:block"></div>
+                            <div className="text-left">
+                                <p className="text-[10px] text-slate-500 uppercase tracking-widest mb-2 font-semibold">Phone</p>
+                                <p className="text-lg md:text-xl font-medium text-white">
+                                    +65 8966 1256
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="mt-16 flex justify-center gap-8 text-slate-600">
+                            {['LinkedIn', 'Behance', 'ArtStation'].map(social => (
+                                <a key={social} href="#" className="text-xs font-bold hover:text-white transition duration-300 uppercase tracking-widest">{social}</a>
+                            ))}
+                        </div>
+                        
+                        <footer className="mt-20 pt-8 border-t border-white/5 text-[10px] text-slate-700 uppercase tracking-widest">
+                            © 2025 Chen Xingyu. All Rights Reserved.
+                        </footer>
+                    </div>
+                </section>
+            );
+        };
+
+        const App = () => {
+            const [showContactModal, setShowContactModal] = useState(false);
+
+            return (
+                <div className="relative">
+                    <ParticleBackground />
+                    <Navbar onOpenContact={() => setShowContactModal(true)} />
+                    <Hero />
+                    <About />
+                    <Portfolio />
+                    <Experience />
+                    <Contact />
+                    
+                    <AnimatePresence>
+                        {showContactModal && (
+                            <ContactModal onClose={() => setShowContactModal(false)} />
+                        )}
+                    </AnimatePresence>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
